@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Survey {
+  id            String     @id @unique
+  title         String
+  description   String?
+  question      String
+  available     Boolean    @default(true)
+  dateCreated   DateTime   @default(now())
+  dateEnded     DateTime?
+  responseCount Int        @default(0)
+  responses     Response[]
+}
+
+model Response {
+  id            Int      @id @default(autoincrement())
+  data          String
+  dateResponded DateTime @default(now())
+  rating        Int
+
+  Survey   Survey? @relation(fields: [surveyId], references: [id])
+  surveyId String?
+}
