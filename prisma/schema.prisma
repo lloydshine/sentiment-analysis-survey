@@ -27,9 +27,9 @@ model Survey {
 model Response {
   id            Int      @id @default(autoincrement())
   response      String
-  feedbacks     String
+  feedbacks     String?
   dateResponded DateTime @default(now())
-  rating        Int
+  rating        Int?
 
   Survey   Survey? @relation(fields: [surveyId], references: [id], onDelete: Cascade)
   surveyId String?

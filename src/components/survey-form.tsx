@@ -43,7 +43,7 @@ export function SurveyForm({
     const { rating, feedbacks } = analysis.data;
     const DATA = {
       response: data.sentiment,
-      feedbacks: JSON.stringify(feedbacks),
+      feedbacks: JSON.stringify(feedbacks, null, 2),
       rating: rating,
     };
     await createResponse(surveyId, DATA);

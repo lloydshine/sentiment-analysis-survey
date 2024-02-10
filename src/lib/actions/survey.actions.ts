@@ -69,7 +69,7 @@ export async function createResponse(surveyId: string, data: any) {
 
 export async function fetchResponse(surveyId: string) {
   try {
-    await db.response.findMany({
+    return await db.response.findMany({
       where: { surveyId: surveyId },
       orderBy: { dateResponded: "desc" },
     });
