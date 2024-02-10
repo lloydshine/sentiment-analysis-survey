@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -12,23 +13,24 @@ datasource db {
 }
 
 model Survey {
-  id            String     @id @unique
-  title         String
-  description   String?
-  question      String
-  available     Boolean    @default(true)
-  dateCreated   DateTime   @default(now())
-  dateEnded     DateTime?
-  responseCount Int        @default(0)
-  responses     Response[]
+  id          String     @id @unique
+  title       String
+  description String?
+  question    String
+  available   Boolean    @default(true)
+  createdBy   String?    @default("Anonymous")
+  dateCreated DateTime   @default(now())
+  dateEnded   DateTime?
+  responses   Response[]
 }
 
 model Response {
   id            Int      @id @default(autoincrement())
-  data          String
+  response      String
+  feedbacks     String
   dateResponded DateTime @default(now())
   rating        Int
 
-  Survey   Survey? @relation(fields: [surveyId], references: [id])
+  Survey   Survey? @relation(fields: [surveyId], references: [id], onDelete: Cascade)
   surveyId String?
 }

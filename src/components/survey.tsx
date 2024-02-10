@@ -5,9 +5,10 @@ import { SurveyBadge } from "./badge";
 
 export function SurveyCard({ survey }: { survey: any }) {
   return (
-    <Card className="w-[400px]">
+    <Card className="md:w-[600px] w-full">
       <CardHeader>
-        <div className="flex justify-end">
+        <div className="flex justify-between mb-2">
+          <p className="text-sm text-foreground/50">By: {survey.createdBy}</p>
           <SurveyBadge available={survey.available} />
         </div>
         <h1 className="text-2xl font-semibold">{survey.title}</h1>
@@ -20,12 +21,12 @@ export function SurveyCard({ survey }: { survey: any }) {
           <Button asChild>
             <Link href={`/view/${survey.id}`}>View</Link>
           </Button>
-          <Button disabled={!survey.available} variant="ghost">
+          <Button disabled={!survey.available} variant="link">
             <Link href={`/${survey.id}`}>Visit</Link>
           </Button>
         </div>
         <p className="text-sm text-foreground/50">
-          Responses: {survey.responseCount}
+          Responses: {survey._count.responses}
         </p>
       </CardFooter>
     </Card>

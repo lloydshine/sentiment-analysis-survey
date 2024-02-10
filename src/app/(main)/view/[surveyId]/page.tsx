@@ -1,3 +1,4 @@
+import { DeleteButton } from "@/components/delete-btn";
 import { Separator } from "@/components/ui/separator";
 import { fetchSurveyByID } from "@/lib/actions/survey.actions";
 
@@ -14,6 +15,7 @@ export default async function ViewSurveyPage({
       <p className="text-foreground/80">{survey.description}</p>
       <Separator className="mb-10 mt-5" />
       <p>Question: {survey.question}</p>
+      <DeleteButton surveyId={survey.id} />
     </main>
   );
 }

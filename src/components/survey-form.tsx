@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { analyze } from "@/lib/ai";
+import { createResponse } from "@/lib/actions/survey.actions";
+import { useRouter } from "next/navigation";
 
 const SurveyFormSchema = z.object({
   sentiment: z.string().min(100, {
@@ -34,28 +36,40 @@ export function SurveyForm({
     resolver: zodResolver(SurveyFormSchema),
   });
 
+  const router = useRouter();
+
   async function onSubmit(data: z.infer<typeof SurveyFormSchema>) {
     const analysis = await analyze(question, data.sentiment);
-    console.log(analysis.data);
+    const { rating, feedbacks } = analysis.data;
+    const DATA = {
+      response: data.sentiment,
+      feedbacks: JSON.stringify(feedbacks),
+      rating: rating,
+    };
+    await createResponse(surveyId, DATA);
+    router.push(`${surveyId}/done`);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
         <FormField
           control={form.control}
           name="sentiment"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{question}</FormLabel>
+              <FormLabel className="text-lg">{question}</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Tell us a little bit about this"
+                  placeholder="Your thoughts about this"
                   className="resize-none text-lg h-[200px]"
                   {...field}
                 />
               </FormControl>
-              <FormDescription>Your reponse must be polite.</FormDescription>
+              <FormDescription>
+                This survey uses AI Sentiment Analysis to analyze your response.
+                You must respond in English.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

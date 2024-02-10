@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { db } from "../db";
 import { uid } from "uid";
 
@@ -11,8 +12,19 @@ export async function createSurvey(data: any) {
         title: data.title,
         description: data.description,
         question: data.question,
+        createdBy: data.createdBy,
       },
     });
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteSurvey(surveyId: string) {
+  try {
+    await db.survey.delete({ where: { id: surveyId } });
+    revalidatePath("/");
   } catch (error) {
     console.log(error);
   }
@@ -20,7 +32,12 @@ export async function createSurvey(data: any) {
 
 export async function fetchSurvey() {
   try {
-    return await db.survey.findMany();
+    return await db.survey.findMany({
+      orderBy: { dateCreated: "desc" },
+      include: {
+        _count: { select: { responses: true } },
+      },
+    });
   } catch (error) {
     console.log(error);
   }
@@ -38,16 +55,23 @@ export async function createResponse(surveyId: string, data: any) {
   try {
     await db.response.create({
       data: {
-        data: data.data,
+        response: data.response,
+        feedbacks: data.feedbacks,
         rating: data.rating,
         surveyId: surveyId,
       },
     });
-  } catch (error) {}
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function fetchResponse(surveyId: string) {
   try {
-    await db.response.findMany({ where: { surveyId: surveyId } });
+    await db.response.findMany({
+      where: { surveyId: surveyId },
+      orderBy: { dateResponded: "desc" },
+    });
   } catch (error) {}
 }
