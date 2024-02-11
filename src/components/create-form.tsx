@@ -38,8 +38,8 @@ export function CreateSurveyForm() {
   const { toast } = useToast();
 
   function onSubmit(data: z.infer<typeof CreateSurveySchema>) {
-    startTransition(() => {
-      createSurvey(data);
+    startTransition(async () => {
+      await createSurvey(data);
     });
     toast({
       title: "Survey Successfully Created",
