@@ -40,14 +40,14 @@ export function SurveyForm({
   const [isPending, startTransition] = useTransition();
 
   function onSubmit(data: z.infer<typeof SurveyFormSchema>) {
-    startTransition(() => {
+    startTransition(async () => {
       const DATA = {
         question: question,
         response: data.sentiment,
       };
-      createResponse(surveyId, DATA);
+      const { status } = await createResponse(surveyId, DATA);
+      router.push(`${surveyId}/done?status=${status}`);
     });
-    router.push(`${surveyId}/done`);
   }
 
   return (

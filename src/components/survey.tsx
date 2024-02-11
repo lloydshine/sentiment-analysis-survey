@@ -5,7 +5,7 @@ import { SurveyBadge } from "./badge";
 
 export function SurveyCard({ survey }: { survey: any }) {
   return (
-    <Card className="md:w-[600px] w-full">
+    <Card className="lg:w-[600px] w-full">
       <CardHeader>
         <div className="flex justify-between mb-2">
           <p className="text-sm text-foreground/50">By: {survey.createdBy}</p>

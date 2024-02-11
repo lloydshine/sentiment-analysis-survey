@@ -14,19 +14,25 @@ import {
 import { deleteSurvey } from "@/lib/actions/survey.actions";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 export function DeleteButton({ surveyId }: { surveyId: string }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const handleDelete = async () => {
-    await deleteSurvey(surveyId);
-    router.push("/");
+    startTransition(async () => {
+      await deleteSurvey(surveyId);
+      router.push("/");
+    });
   };
 
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Delete Survey</Button>
+        <Button variant="destructive" disabled={isPending}>
+          Delete Survey
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

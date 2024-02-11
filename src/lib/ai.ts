@@ -28,6 +28,5 @@ export async function analyze(question: string, sentiment: string) {
     return { data: JSON.parse(response.text()) };
   } catch (error) {
     console.log(error);
-    return { data: "Ulol" };
   }
 }

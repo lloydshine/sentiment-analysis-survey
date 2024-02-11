@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <main>
+    <main className="pb-10">
       <Suspense fallback={<>Loading Surveys...</>}>
         <SurveyList />
       </Suspense>

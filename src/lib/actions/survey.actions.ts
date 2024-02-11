@@ -55,6 +55,7 @@ export async function fetchSurveyByID(id: string) {
 export async function createResponse(surveyId: string, data: any) {
   try {
     const analysis = await analyze(data.question, data.response);
+    if (!analysis) return { status: "failed" };
     await db.response.create({
       data: {
         response: data.response,
@@ -64,8 +65,10 @@ export async function createResponse(surveyId: string, data: any) {
       },
     });
     revalidatePath("/");
+    return { status: "success" };
   } catch (error) {
     console.log(error);
+    return { status: "failed" };
   }
 }
 

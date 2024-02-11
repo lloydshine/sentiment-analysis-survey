@@ -40,12 +40,12 @@ export function CreateSurveyForm() {
   function onSubmit(data: z.infer<typeof CreateSurveySchema>) {
     startTransition(async () => {
       await createSurvey(data);
+      toast({
+        title: "Survey Successfully Created",
+        description: "You can now view your new Survey",
+      });
+      router.push("/");
     });
-    toast({
-      title: "Survey Successfully Created",
-      description: "You can now view your new Survey",
-    });
-    router.push("/");
   }
 
   return (
