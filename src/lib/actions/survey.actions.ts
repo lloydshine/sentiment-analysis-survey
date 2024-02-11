@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { db } from "../db";
 import { uid } from "uid";
+import { analyze } from "../ai";
 
 export async function createSurvey(data: any) {
   try {
@@ -53,11 +54,12 @@ export async function fetchSurveyByID(id: string) {
 
 export async function createResponse(surveyId: string, data: any) {
   try {
+    const analysis = await analyze(data.question, data.response);
     await db.response.create({
       data: {
         response: data.response,
-        feedbacks: data.feedbacks,
-        rating: data.rating,
+        feedbacks: JSON.stringify(analysis.data.feedbacks, null, 2),
+        rating: analysis.data.rating,
         surveyId: surveyId,
       },
     });

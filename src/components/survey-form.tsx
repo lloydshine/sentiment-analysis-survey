@@ -15,9 +15,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { analyze } from "@/lib/ai";
 import { createResponse } from "@/lib/actions/survey.actions";
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 const SurveyFormSchema = z.object({
   sentiment: z.string().min(100, {
@@ -37,16 +37,16 @@ export function SurveyForm({
   });
 
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
-  async function onSubmit(data: z.infer<typeof SurveyFormSchema>) {
-    const analysis = await analyze(question, data.sentiment);
-    const { rating, feedbacks } = analysis.data;
-    const DATA = {
-      response: data.sentiment,
-      feedbacks: JSON.stringify(feedbacks, null, 2),
-      rating: rating,
-    };
-    await createResponse(surveyId, DATA);
+  function onSubmit(data: z.infer<typeof SurveyFormSchema>) {
+    startTransition(() => {
+      const DATA = {
+        question: question,
+        response: data.sentiment,
+      };
+      createResponse(surveyId, DATA);
+    });
     router.push(`${surveyId}/done`);
   }
 
@@ -64,6 +64,7 @@ export function SurveyForm({
                   placeholder="Your thoughts about this"
                   className="resize-none text-lg h-[200px]"
                   {...field}
+                  disabled={isPending}
                 />
               </FormControl>
               <FormDescription>
@@ -74,7 +75,7 @@ export function SurveyForm({
             </FormItem>
           )}
         />
-        <Button type="submit" size="lg">
+        <Button type="submit" size="lg" disabled={isPending}>
           Submit
         </Button>
       </form>

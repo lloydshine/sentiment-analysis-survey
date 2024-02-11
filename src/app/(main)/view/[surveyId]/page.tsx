@@ -13,7 +13,7 @@ export default async function ViewSurveyPage({
   const responses = (await fetchResponse(survey.id)) || [];
   return (
     <main>
-      <h1 className="text-3xl mb-2">{survey.title} Survey</h1>
+      <h1 className="text-3xl mb-2">{survey.title}</h1>
       <p className="text-foreground/80">{survey.description}</p>
       <Separator className="mb-10 mt-5" />
       <p className="font-bold my-4">Question: {survey.question}</p>
