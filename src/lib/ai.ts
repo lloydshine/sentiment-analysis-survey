@@ -15,7 +15,7 @@ export async function analyze(question: string, sentiment: string) {
     }
     
     The Question:
-    "${question}"
+    "${question}?"
     
     The Response:
     "${sentiment}"
