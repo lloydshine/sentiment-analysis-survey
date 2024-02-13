@@ -22,7 +22,7 @@ export function SurveyCard({ survey }: { survey: any }) {
             <Link href={`/view/${survey.id}`}>View</Link>
           </Button>
           <Button disabled={!survey.available} variant="link">
-            <Link href={`/${survey.id}`}>Visit</Link>
+            <Link href={`/${survey.id}`}>Answer</Link>
           </Button>
         </div>
         <p className="text-sm text-foreground/50">
