@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TrashIcon } from "@radix-ui/react-icons";
+import { Button } from "./ui/button";
 
 export default function ResponsesTable({
   responses,
@@ -23,6 +24,7 @@ export default function ResponsesTable({
           <TableHead className="w-[400px]">Response</TableHead>
           <TableHead>Rating</TableHead>
           <TableHead className="w-[400px]">Feedbacks</TableHead>
+          <TableHead>Date Responded</TableHead>
           <TableHead className="text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
@@ -35,8 +37,13 @@ export default function ResponsesTable({
               <pre className="max-w-[500px] overflow-auto">{res.feedbacks}</pre>
             </TableCell>
             <TableCell>
+              {new Date(res.dateResponded).toLocaleDateString()}
+            </TableCell>
+            <TableCell>
               <div className="flex justify-end">
-                <TrashIcon className="text-destructive w-6 h-6" />
+                <Button size="icon" variant="destructive">
+                  <TrashIcon />
+                </Button>
               </div>
             </TableCell>
           </TableRow>
